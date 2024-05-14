@@ -1,27 +1,16 @@
 <template>
-  <div id="app">
+<div id="app">
 
-    <!-- heading -->
-    <header>
-      <h1>Books<span>.app</span></h1>
-    </header>
+  <!-- heading -->
+  <header>
+    <h1>Books<span>.app</span></h1>
+  </header>
 
-    <!-- books list -->
-    <ul>
-      <li :key="index" v-for="(book, index) in books">
-        {{ book.title }}, {{ book.price }}$
-        <button @click="removeBook(index)">Remove</button>
-      </li>
-    </ul>
+  <!-- books list -->
+  <books-list :books="books" :removeBook="removeBook" />
 
-    <!-- no books message -->
-    <div>
-
-      <p v-if="books.length > 5">books-amount: {{ books.length }} books</p>
-      <p v-if="books.length > 1 && books.length <= 5">Not too many of them…</p>
-      <p v-if="books.length === 1"> One single book! </p>
-      <p v-show="!books.length">Go get some books!</p>
-    </div>
+  <!-- no books message -->
+  <books-length-msg :books="books.length" />
 
     <!-- add book form -->
     <form @submit.prevent="handleSubmit">
@@ -37,10 +26,13 @@
       </label>
       <button @submit.prevent="handleSubmit">Add book</button>
     </form>
-  </div>
+</div>
 </template>
 
 <script>
+import BooksList from './components/BooksList'
+import BooksLengthMsg from './components/BooksLengthMsg'
+
 export default {
   name: 'App',
   data: () => ({
@@ -70,6 +62,10 @@ export default {
       this.form.title = ''
       this.form.price = 0
     }
+  },
+  components: {
+    BooksList,
+    BooksLengthMsg
   }
 }
 </script>
