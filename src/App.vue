@@ -12,26 +12,19 @@
   <!-- no books message -->
   <books-length-msg :books="books.length" />
 
-    <!-- add book form -->
-    <form @submit.prevent="handleSubmit">
-      <label>
-        Title:
-        <input v-model="form.title" type="text" name="title">
+  <!-- add book form -->
+  <book-form @add="addBook" />
 
-      </label>
-      <label>
-        price:
-        <input v-model="form.price" type="number" name="price">
+  <books-summary :summary="booksSum" />
 
-      </label>
-      <button @submit.prevent="handleSubmit">Add book</button>
-    </form>
 </div>
 </template>
 
 <script>
 import BooksList from './components/BooksList'
 import BooksLengthMsg from './components/BooksLengthMsg'
+import BookForm from './components/BookForm'
+import BooksSummary from './components/BooksSummary'
 
 export default {
   name: 'App',
@@ -45,11 +38,7 @@ export default {
         title: 'Of Mice and Men',
         price: 18
       }
-    ],
-    form: {
-      title: '',
-      price: 0
-    }
+    ]
   }),
   methods: {
     // eslint-disable-next-line
@@ -57,15 +46,23 @@ export default {
       this.books.splice(index, 1)
     },
     // eslint-disable-next-line
-    handleSubmit() {
-      this.books.push({ ...this.form })
-      this.form.title = ''
-      this.form.price = 0
+    addBook(book) {
+      this.books.push({ ...book })
+    }
+  },
+  computed: {
+    // eslint-disable-next-line
+    booksSum() {
+      const totalPrice = this.books.reduce((total, book) => total + book.price, 0)
+      const totalBooks = this.books.length
+      return { totalPrice, totalBooks }
     }
   },
   components: {
     BooksList,
-    BooksLengthMsg
+    BooksLengthMsg,
+    BookForm,
+    BooksSummary
   }
 }
 </script>
